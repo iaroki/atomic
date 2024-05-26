@@ -6,12 +6,12 @@ Based on Universal Blue project: https://github.com/ublue-os
 
 ## Configuration progress
 
-[*] Image build
-[ ] Dotfiles management
-[ ] Dconf management
-[ ] Packages management
-[ ] Distrobox management
-[ ] Development environment
+- [x] Image build
+- [ ] Dotfiles management
+- [ ] Dconf management
+- [ ] Packages management
+- [ ] Distrobox management
+- [ ] Development environment
 
 ## Local build
 
