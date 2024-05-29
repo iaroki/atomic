@@ -36,6 +36,12 @@ if [ -n "${RPMFUSION_MIRROR}" ]; then
     sed -i "s%^#baseurl=http://download1.rpmfusion.org%baseurl=${RPMFUSION_MIRROR}%" /etc/yum.repos.d/rpmfusion-*.repo
 fi
 
+# hack in missing repos
+curl -Lo /etc/yum.repos.d/keyd.repo https://copr.fedorainfracloud.org/coprs/alternateved/keyd/repo/fedora-40/alternateved-keyd-fedora-40.repo
+curl -Lo /etc/yum.repos.d/nerd-fonts.repo https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-40/che-nerd-fonts-fedora-40.repo
+curl -Lo /etc/yum.repos.d/lazygit.repo https://copr.fedorainfracloud.org/coprs/totalfreak/lazygit/repo/fedora-40/totalfreak-lazygit-fedora-40.repo
+curl -Lo /etc/yum.repos.d/glow.repo https://copr.fedorainfracloud.org/coprs/tokariew/glow/repo/fedora-40/tokariew-glow-fedora-40.repo
+
 # run common packages script
 /tmp/packages.sh
 
