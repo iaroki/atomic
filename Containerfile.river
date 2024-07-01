@@ -55,6 +55,7 @@ RUN rpm-ostree install -y \
     tofi \
     vulkan-validation-layers \
     vulkan-tools \
+    vim \
     waybar \
     wl-clipboard \
     wlr-randr \
