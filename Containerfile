@@ -1,31 +1,26 @@
-ARG IMAGE_NAME="${IMAGE_NAME:-silverblue}"
-ARG SOURCE_IMAGE="${SOURCE_IMAGE:-silverblue}"
-ARG SOURCE_ORG="${SOURCE_ORG:-fedora-ostree-desktops}"
-ARG BASE_IMAGE="quay.io/${SOURCE_ORG}/${SOURCE_IMAGE}"
-ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
+ARG BASE_IMAGE_NAME="silverblue"
+ARG FEDORA_MAJOR_VERSION="41"
+ARG SOURCE_IMAGE="${BASE_IMAGE_NAME}-main"
+ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 
-#FROM ghcr.io/ublue-os/config:latest as config
-#FROM ghcr.io/ublue-os/akmods:main-${FEDORA_MAJOR_VERSION} as akmods
+FROM scratch AS ctx
+COPY / /
 
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION}
+## bluefin image section
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
 
-ARG IMAGE_NAME="${IMAGE_NAME:-silverblue}"
-ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
-ARG RPMFUSION_MIRROR=""
+ARG AKMODS_FLAVOR="coreos-stable"
+ARG BASE_IMAGE_NAME="silverblue"
+ARG FEDORA_MAJOR_VERSION="41"
+ARG IMAGE_NAME="bluefin"
+ARG IMAGE_VENDOR="ublue-os"
+ARG KERNEL="6.10.10-200.fc40.x86_64"
+ARG SHA_HEAD_SHORT="dedbeef"
+ARG UBLUE_IMAGE_TAG="stable"
+ARG VERSION=""
 
-COPY scripts/install.sh \
-     scripts/post-install.sh \
-     scripts/packages.sh \
-     packages.json \
-     /tmp/
+# Build, cleanup, commit.
+RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+    --mount=type=bind,from=ctx,source=/,target=/ctx \
+    /ctx/build_files/shared/build-base.sh
 
-RUN mkdir -p /var/lib/alternatives && \
-    mkdir -p /tmp/rpms && \
-    /tmp/install.sh && \
-    /tmp/post-install.sh && \
-    mv /var/lib/alternatives /staged-alternatives && \
-    rm -rf /tmp/* /var/* && \
-    ostree container commit && \
-    mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives && \
-    mkdir -p /tmp /var/tmp && \
-    chmod -R 1777 /tmp /var/tmp

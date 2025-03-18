@@ -1,4 +1,4 @@
-# silverblue
+# atomic desktop
 Custom OCI build for Fedora Silverblue
 
 ## Origin
